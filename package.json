@@ -1,13 +1,14 @@
 {
-  "name": "helprs",
-  "version": "1.0.0",
+  "name": "@matheuscaetano/helprs",
+  "version": "2.0.0",
   "description": "Helpful utilities functions",
   "main": "index.js",
   "directories": {
     "lib": "lib"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest",
+    "test:watch": "jest --watch"
   },
   "repository": {
     "type": "git",
@@ -18,5 +19,8 @@
   "bugs": {
     "url": "https://github.com/oMatheusCaetano/helprs-js/issues"
   },
-  "homepage": "https://github.com/oMatheusCaetano/helprs-js#readme"
+  "homepage": "https://github.com/oMatheusCaetano/helprs-js#readme",
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
 }

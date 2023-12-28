@@ -12,19 +12,28 @@ module.exports = class Text {
   }
 
   first() {
-    if (!this.value?.length) return '';
+    if (!this.value?.length) {
+      this.value = '';
+      return this;
+    };
     this.value = this.value.charAt(0);
     return this;
   }
 
   removeFirst() {
-    if (!this.value?.length) return '';
+    if (!this.value?.length) {
+      this.value = '';
+      return this;
+    };
     this.value = this.value.slice(1);
     return this;
   }
 
   capitalizeFirst() {
-    if (!this.value?.length) return '';
+    if (!this.value?.length) {
+      this.value = '';
+      return this;
+    };
     this.value = this.value.charAt(0).toUpperCase() + this.value.slice(1);
     return this;
   }
