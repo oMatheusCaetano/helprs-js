@@ -76,3 +76,8 @@ export function removeLast<T = number | string | any[]>(value: T):
  * Concatenates multiple path segments into a single path.
  */
 export function concatPath(...paths: (string | number)[]): string;
+
+/**
+ * Handles TailwindCSS class merge.
+ */
+export function tw(className?: string, ...args: string[]): string;

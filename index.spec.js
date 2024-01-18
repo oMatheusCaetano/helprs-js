@@ -1,4 +1,4 @@
-const { first, last, uniqId, uuid, removeFirst, concatPath } = require('.');
+const { first, last, uniqId, uuid, removeFirst, concatPath, tw } = require('.');
 
 describe('first', () => {
   test('Returns empty string for empty string input', () => {
@@ -140,3 +140,12 @@ describe('concatPath', () => {
     expect(result).toBe('path1/asd/asd/asd/asd/path2');
   });
 });
+
+describe('tw', () => {
+  test('Should concatenate classes.', () => {
+    expect(
+      tw('bg-primary border-b  bg-primary', 'bg-primary border-b  bg-primary')
+    ).toBe('border-b bg-primary');
+  });
+})
+

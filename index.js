@@ -1,3 +1,6 @@
+const classNames = require('classnames');
+const twMerge = require('tailwind-merge').twMerge;
+
 /**
  * Returns the first character of the given value.
  * - If the value is an empty string, it will return an empty string.
@@ -95,9 +98,17 @@ function concatPath(...paths) {
   return fullPath;
 }
 
+/**
+ * Handles TailwindCSS class merge.
+ */
+function tw(className, ...args) {
+  return twMerge(className, classNames(args));
+}
+
 module.exports = {
   concatPath,
   first,
+  tw,
   removeFirst,
   removeLast,
   last,
