@@ -48,7 +48,7 @@ function removeFirst(value) {
 }
 
 /**
- * Removes the first character from a given value.
+ * Removes the last character from a given value.
  */
 function removeLast(value) {
   if (typeof value === 'number') return Number(`${value}`.slice(0, -1));
@@ -83,8 +83,8 @@ function concatPath(...paths) {
   let fullPath = '';
 
   paths.forEach((path) => {
-    if (!path?.length) return;
-    path = path.trim().replace(/[\/]+/g, '/');
+    if (!path || !`${path}`?.trim()?.length) return;
+    path = `${path}`.trim().replace(/[\/]+/g, '/');
 
     if (path.endsWith('/')) path = removeLast(path);
     if (path.startsWith('/')) path = removeFirst(path);

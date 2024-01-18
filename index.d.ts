@@ -55,3 +55,24 @@ export function uniqId(): string;
  * Generates a unique identifier in UUID format.
  */
 export function uuid(): string;
+
+/**
+ * Removes the first character from a given value.
+ */
+export function removeFirst<T = number | string | any[]>(value: T): 
+  T extends number ? number :
+  T extends string ? string :
+  any[];
+
+/**
+ * Removes the last character from a given value.
+ */
+export function removeLast<T = number | string | any[]>(value: T): 
+  T extends number ? number :
+  T extends string ? string :
+  any[];
+
+/**
+ * Concatenates multiple path segments into a single path.
+ */
+export function concatPath(...paths: (string | number)[]): string;
