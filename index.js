@@ -39,6 +39,25 @@ function last(value) {
 }
 
 /**
+ * Removes the first character from a given value.
+ */
+function removeFirst(value) {
+  if (typeof value === 'number') return Number(`${value}`.slice(1));
+  if (Array.isArray(value)) return value.slice(1) ?? [];
+  return value.slice(1);
+}
+
+/**
+ * Removes the first character from a given value.
+ */
+function removeLast(value) {
+  if (typeof value === 'number') return Number(`${value}`.slice(0, -1));
+  if (Array.isArray(value)) return value.slice(0, -1) ?? [];
+
+  return value.slice(0, -1);
+}
+
+/**
  * Generates a unique ID.
  */
 function uniqId() {
@@ -57,8 +76,30 @@ function uuid() {
   });
 };
 
+/**
+ * Concatenates multiple path segments into a single path.
+ */
+function concatPath(...paths) {
+  let fullPath = '';
+
+  paths.forEach((path) => {
+    if (!path?.length) return;
+    path = path.trim().replace(/[\/]+/g, '/');
+
+    if (path.endsWith('/')) path = removeLast(path);
+    if (path.startsWith('/')) path = removeFirst(path);
+
+    fullPath = !!fullPath.length ? `${fullPath}/${path}` : path;
+  });
+
+  return fullPath;
+}
+
 module.exports = {
+  concatPath,
   first,
+  removeFirst,
+  removeLast,
   last,
   uniqId,
   uuid,

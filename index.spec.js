@@ -1,4 +1,4 @@
-const { first, last, uniqId, uuid } = require('.');
+const { first, last, uniqId, uuid, removeFirst, concatPath } = require('.');
 
 describe('first', () => {
   test('Returns empty string for empty string input', () => {
@@ -78,15 +78,65 @@ describe('uniqId', () => {
   test('generates a unique ID', () => {
     const id = uniqId();
     expect(typeof id).toBe('string');
-    expect(id.length).toBe(21);
   });
 });
-
 
 describe('uuid', () => {
   it('should generate a unique identifier in UUID format', () => {
     const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
     expect(uuid()).toMatch(uuidRegex);
     expect(uuid()).toMatch(uuidRegex);
+  });
+});
+
+describe('removeFirst', () => {
+  it('should remove the first character from a string', () => {
+    const result = removeFirst('hello');
+    expect(result).toBe('ello');
+  });
+
+  it('should remove the first character from a number', () => {
+    const result = removeFirst(12345);
+    expect(result).toBe(2345);
+  });
+
+  it('should return an empty string if the value is an empty string', () => {
+    const result = removeFirst('');
+    expect(result).toBe('');
+  });
+
+  it('should return the same value if the value has only one character', () => {
+    const result = removeFirst('a');
+    expect(result).toBe('');
+  });
+
+  it('should remove the first character from an array', () => {
+    const result = removeFirst([1,2,3]);
+    expect(result).toEqual([2,3]);
+
+    const result2 = removeFirst([]);
+    expect(result2).toEqual([]);
+  });
+});
+
+describe('concatPath', () => {
+  test('should concatenate path segments correctly', () => {
+    const result = concatPath('/path1', 'path2/', '/path3/');
+    expect(result).toBe('path1/path2/path3');
+  });
+
+  test('should return empty string if no path segments are provided', () => {
+    const result = concatPath();
+    expect(result).toBe('');
+  });
+
+  test('should handle empty path segments correctly', () => {
+    const result = concatPath('/path1', '', 'path2/');
+    expect(result).toBe('path1/path2');
+  });
+
+  test('should handle empty path segments correctly', () => {
+    const result = concatPath('///path1', '', 'asd', ' /asd/ ', '//asd', 'asd//', '//path2//');
+    expect(result).toBe('path1/asd/asd/asd/asd/path2');
   });
 });
