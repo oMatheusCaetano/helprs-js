@@ -98,6 +98,11 @@ function concatPath(...paths) {
   return fullPath;
 }
 
+function removeNonNumbers(value) {
+  if (!str) return '';
+  return str.replace(/\D/g, '');
+}
+
 /**
  * Handles TailwindCSS class merge.
  */

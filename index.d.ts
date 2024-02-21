@@ -78,6 +78,11 @@ export function removeLast<T = number | string | any[]>(value: T):
 export function concatPath(...paths: (string | number)[]): string;
 
 /**
+ * Removes all the non numeric characters from a given value.
+ */
+export function removeNonNumbers(value?: string): string;
+
+/**
  * Handles TailwindCSS class merge.
  */
 export function tw(className?: string, ...args: string[]): string;
