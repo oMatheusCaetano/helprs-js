@@ -119,4 +119,5 @@ module.exports = {
   last,
   uniqId,
   uuid,
+  removeNonNumbers,
 }

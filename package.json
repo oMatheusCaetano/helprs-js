@@ -1,6 +1,6 @@
 {
   "name": "@matheuscaetano/helprs",
-  "version": "3.5.1",
+  "version": "3.5.2",
   "description": "Helpful utilities functions",
   "main": "index.js",
   "typings": "index.d.ts",
