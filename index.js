@@ -99,7 +99,7 @@ function concatPath(...paths) {
 }
 
 function removeNonNumbers(value) {
-  if (!str) return '';
+  if (!value) return '';
   return str.replace(/\D/g, '');
 }
 
