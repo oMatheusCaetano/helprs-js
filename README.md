@@ -19,17 +19,17 @@ yarn add @matheuscaetano/helprs
 
 | Function         | Description |
 |------------------|-------------|
-| `first(value, options?)` | Returns the first portion of strings, numbers, booleans, arrays, or objects. Supports `amount` option. |
-| `last(value, options?)` | Returns the last portion of strings, numbers, booleans, arrays, or objects. Supports `amount` option. |
-| `removeFirst(value, options?)` | Removes the first portion of strings, numbers, arrays, or objects. Supports `amount` option. |
-| `removeLast(value, options?)` | Removes the last portion of strings, numbers, arrays, or objects. Supports `amount` option. |
-| `uniqId()` | Generates a unique identifier using random base-36 strings. |
-| `uuid()` | Generates a RFC4122 version 4 UUID. |
-| `concatPath(...paths)` | Concatenates and normalizes path segments, removing duplicate slashes. |
-| `removeNonNumbers(value)` | Removes all non-numeric characters from a string. |
-| `tw(...args)` | Concatenates and deduplicates Tailwind CSS class names. Supports strings, arrays, numbers, nulls, and undefined values. |
-| `keyValues(listOfObjects, key, options?)` | Extracts values from a list of objects based on a key. Can remove duplicates. |
-| `removeDuplicates(value, options?)` | Removes duplicate characters in strings or elements in arrays. |
+| `first` | Returns the first portion of strings, numbers, booleans, arrays, or objects. Supports `amount` option. |
+| `last` | Returns the last portion of strings, numbers, booleans, arrays, or objects. Supports `amount` option. |
+| `removeFirst` | Removes the first portion of strings, numbers, arrays, or objects. Supports `amount` option. |
+| `removeLast` | Removes the last portion of strings, numbers, arrays, or objects. Supports `amount` option. |
+| `uniqId` | Generates a unique identifier using random base-36 strings. |
+| `uuid` | Generates a RFC4122 version 4 UUID. |
+| `concatPath` | Concatenates and normalizes path segments, removing duplicate slashes. |
+| `removeNonNumbers` | Removes all non-numeric characters from a string. |
+| `tw` | Concatenates and deduplicates Tailwind CSS class names. Supports strings, arrays, numbers, nulls, and undefined values. |
+| `keyValues` | Extracts values from a list of objects based on a key. Can remove duplicates. |
+| `removeDuplicates` | Removes duplicate characters in strings or elements in arrays. |
 
 ## ✅ Usage Example
 
