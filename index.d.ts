@@ -308,3 +308,28 @@ export function formatCnpjCpf(value?: string[]): string[];
 export function formatCnpjCpf<T extends { [key: string]: any }>(value?: T): T;
 export function formatCnpjCpf<T extends { [key: string]: any }>(value?: T[]): T[];
 
+/**
+ * Groups an array of objects by a specified key.
+ * Returns an object where each key is the value of the specified key in the objects,
+ * and the value is an array of objects that share that key value.
+ * 
+ * @template T - Type of objects in the array.
+ * @template K - Key to group by.
+ * @param {T[]} data - The array of objects to group.
+ * @param {K} key - The key to group the objects by.
+ * @returns {Record<T[K], T[]>} An object where keys are the values of the specified key, and values are arrays of objects.
+ * 
+ * @example
+ * const data = [
+ *   { id: 1, category: 'A', value: 10 },
+ *   { id: 2, category: 'B', value: 20 },
+ *   { id: 3, category: 'A', value: 30 },
+ *   { id: 4, category: 'B', value: 40 }
+ * ];
+ * const grouped = groupBy(data, 'category');
+ * // {
+ * //   A: [{ id: 1, category: 'A', value: 10 }, { id: 3, category: 'A', value: 30 }],
+ * //   B: [{ id: 2, category: 'B', value: 20 }, { id: 4, category: 'B', value: 40 }]
+ * // }
+ */
+function groupBy<T extends { [key: string]: any }, K extends keyof T>(data: T[], key: K): Record<T[K], T[]>;

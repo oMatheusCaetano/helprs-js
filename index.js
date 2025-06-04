@@ -435,7 +435,6 @@ function removeDuplicates(value, options = {}) {
   return null;
 }
 
-
 /**
  * Formats a CPF or CNPJ number into a standardized string format.
  * - For strings: returns the formatted CPF or CNPJ.
@@ -512,6 +511,39 @@ function formatCnpjCpf(value) {
   return value;
 }
 
+/**
+ * Groups an array of objects by a specified key.
+ * Returns an object where each key is the value of the specified key in the objects,
+ * and the value is an array of objects that share that key value.
+ * 
+ * @param {Object[]} data - The array of objects to group.
+ * @param {string} key - The key to group the objects by.
+ * @returns {Object} An object where keys are the values of the specified key, and values are arrays of objects.
+ * 
+ * @example
+ * const data = [
+ *   { id: 1, category: 'A', value: 10 },
+ *   { id: 2, category: 'B', value: 20 },
+ *   { id: 3, category: 'A', value: 30 },
+ *   { id: 4, category: 'B', value: 40 }
+ * ];
+ * const grouped = groupBy(data, 'category');
+ * // {
+ * //   A: [{ id: 1, category: 'A', value: 10 }, { id: 3, category: 'A', value: 30 }],
+ * //   B: [{ id: 2, category: 'B', value: 20 }, { id: 4, category: 'B', value: 40 }]
+ * // }
+ */
+function groupBy(data, key) {
+  return data.reduce((acc, item) => {
+    const groupKey = item[key];
+    if (!acc[groupKey]) {
+      acc[groupKey] = [];
+    }
+    acc[groupKey].push(item);
+    return acc;
+  }, {});
+}
+
 module.exports = {
   concatPath,
   first,
@@ -524,5 +556,6 @@ module.exports = {
   removeNonNumbers,
   keyValues,
   removeDuplicates,
-  formatCnpjCpf
+  formatCnpjCpf,
+  groupBy
 }

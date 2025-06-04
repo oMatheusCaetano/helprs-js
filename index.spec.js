@@ -10,7 +10,8 @@ const {
   tw,
   keyValues,
   removeDuplicates,
-  formatCnpjCpf
+  formatCnpjCpf,
+  groupBy
 } = require('.');
 
 describe('first', () => {
@@ -453,5 +454,83 @@ describe('formatCnpjCpf', () => {
       { cpf: '123.456.789-09', cnpj: '12.345.678/0001-95' }
     ];
     expect(formatCnpjCpf(input)).toEqual(expected);
+  });
+});
+
+describe('groupBy', () => {
+  it('groups objects by a string key', () => {
+    const data = [
+      { id: 1, category: 'A', value: 10 },
+      { id: 2, category: 'B', value: 20 },
+      { id: 3, category: 'A', value: 30 },
+      { id: 4, category: 'B', value: 40 }
+    ];
+    const result = groupBy(data, 'category');
+    expect(result).toEqual({
+      A: [
+        { id: 1, category: 'A', value: 10 },
+        { id: 3, category: 'A', value: 30 }
+      ],
+      B: [
+        { id: 2, category: 'B', value: 20 },
+        { id: 4, category: 'B', value: 40 }
+      ]
+    });
+  });
+
+  it('groups objects by a numeric key', () => {
+    const data = [
+      { id: 1, value: 10 },
+      { id: 2, value: 10 },
+      { id: 3, value: 20 }
+    ];
+    const result = groupBy(data, 'value');
+    expect(result).toEqual({
+      10: [
+        { id: 1, value: 10 },
+        { id: 2, value: 10 }
+      ],
+      20: [
+        { id: 3, value: 20 }
+      ]
+    });
+  });
+
+  it('returns an empty object for an empty array', () => {
+    expect(groupBy([], 'id')).toEqual({});
+  });
+
+  it('handles objects with missing keys gracefully', () => {
+    const data = [
+      { id: 1, type: 'x' },
+      { id: 2 },
+      { id: 3, type: 'x' }
+    ];
+    const result = groupBy(data, 'type');
+    expect(result).toEqual({
+      x: [
+        { id: 1, type: 'x' },
+        { id: 3, type: 'x' }
+      ],
+      undefined: [{ id: 2 }]
+    });
+  });
+
+  it('groups by boolean key', () => {
+    const data = [
+      { id: 1, active: true },
+      { id: 2, active: false },
+      { id: 3, active: true }
+    ];
+    const result = groupBy(data, 'active');
+    expect(result).toEqual({
+      true: [
+        { id: 1, active: true },
+        { id: 3, active: true }
+      ],
+      false: [
+        { id: 2, active: false }
+      ]
+    });
   });
 });
