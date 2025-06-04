@@ -367,6 +367,41 @@ function keyValues(listOfObjects, key) {
     .filter(value => value !== null && value !== undefined);
 }
 
+function removeDuplicates(value, options = {}) {
+  const { equality = 'loose' } = options;
+
+  if (typeof value === 'string') {
+    // Remove caracteres duplicados mantendo a ordem
+    let seen = new Set();
+    return [...value].filter(char => {
+      if (seen.has(char)) return false;
+      seen.add(char);
+      return true;
+    }).join('');
+  }
+
+  if (Array.isArray(value)) {
+    let result = [];
+
+    for (let i = 0; i < value.length; i++) {
+      const item = value[i];
+      let isDuplicate = false;
+
+      for (let j = 0; j < result.length; j++) {
+        if (equality === 'strict' ? result[j] === item : result[j] == item) {
+          isDuplicate = true;
+          break;
+        }
+      }
+
+      if (!isDuplicate) result.push(item);
+    }
+
+    return result;
+  }
+
+  return null;
+}
 
 module.exports = {
   concatPath,
@@ -378,5 +413,6 @@ module.exports = {
   uniqId,
   uuid,
   removeNonNumbers,
-  keyValues
+  keyValues,
+  removeDuplicates
 }

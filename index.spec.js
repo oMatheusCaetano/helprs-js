@@ -1,4 +1,4 @@
-const { first, last, uniqId, uuid, removeFirst, removeLast, concatPath, removeNonNumbers, tw, keyValue } = require('.');
+const { first, last, uniqId, uuid, removeFirst, removeLast, concatPath, removeNonNumbers, tw, keyValues, removeDuplicates } = require('.');
 
 describe('first', () => {
   test('Returns empty string for empty string input', () => {
@@ -270,8 +270,6 @@ describe('removeNonNumbers', () => {
 });
 
 describe('keyValues', () => {
-  const { keyValues } = require('.');
-
   test('extracts values for a given key from an array of objects', () => {
     const data = [
       { name: 'Alice', age: 30 },
@@ -304,5 +302,32 @@ describe('keyValues', () => {
       { id: 3, active: true }
     ];
     expect(keyValues(data, 'active')).toEqual([true, false, true]);
+  });
+});
+
+describe('removeDuplicates', () => {
+  test('removes duplicate characters from a string', () => {
+    expect(removeDuplicates('aabbcc')).toBe('abc');
+    expect(removeDuplicates('abcabc')).toBe('abc');
+    expect(removeDuplicates('')).toBe('');
+  });
+
+  test('removes duplicate elements from an array (loose equality)', () => {
+    expect(removeDuplicates([1, '1', 2, 2, 3, '3', 3])).toEqual([1, 2, 3]);
+    expect(removeDuplicates([false, 0, null, '', undefined])).toEqual([false, null]);
+  });
+
+  test('removes duplicate elements from an array (strict equality)', () => {
+    expect(removeDuplicates([1, '1', 2, 2, 3, '3', 3], { equality: 'strict' }))
+      .toEqual([1, '1', 2, 3, '3']);
+    expect(removeDuplicates([false, 0, null, '', undefined], { equality: 'strict' }))
+      .toEqual([false, 0, null, '', undefined]);
+  });
+
+  test('returns null for unsupported types', () => {
+    expect(removeDuplicates(123)).toBeNull();
+    expect(removeDuplicates({ a: 1 })).toBeNull();
+    expect(removeDuplicates(null)).toBeNull();
+    expect(removeDuplicates(undefined)).toBeNull();
   });
 });
