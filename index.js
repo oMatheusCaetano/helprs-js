@@ -351,6 +351,23 @@ function tw(...args) {
   return Array.from(new Set(classes)).join(' ');
 }
 
+/**
+ * Extracts values from a list of objects based on a specified key.
+ * Returns an array of values corresponding to the given key.
+ * 
+ * If the key does not exist in an object or its value is null/undefined, it will not be included in the result.
+ * 
+ * @param {Object[]} listOfObjects - An array of objects to extract values from.
+ * @param {string} key - The key whose values will be extracted from each object.
+ * @returns {any[]} An array of values corresponding to the specified key.
+ */
+function keyValues(listOfObjects, key) {
+  return listOfObjects
+    .map(obj => obj[key])
+    .filter(value => value !== null && value !== undefined);
+}
+
+
 module.exports = {
   concatPath,
   first,
@@ -361,4 +378,5 @@ module.exports = {
   uniqId,
   uuid,
   removeNonNumbers,
+  keyValues
 }

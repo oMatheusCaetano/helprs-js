@@ -214,3 +214,42 @@ export function removeNonNumbers(value?: string): string;
  * tw('bg-red-500', 'text-white', ['p-4', 'm-2']); // 'bg-red-500 m-2 p-4 text-white'
  */
 export function tw(...args: (string | string[] | number | number[] | null | null[] | undefined | undefined[])[]): string;
+
+/**
+ * Extracts values from a list of objects based on a specified key.
+ * Returns an array of values corresponding to the given key.
+ * 
+ * If the key does not exist in an object or its value is null, it will not be included in the result.
+ * 
+ * @param {T[]} listOfObjects - An array of objects to extract values from.
+ * @param {keyof T} key - The key whose values will be extracted from each object.
+ * @returns {ValueOf<keyof T>[]} An array of values corresponding to the specified key.
+ * 
+ * @example
+ * const data = [{ name: 'Alice', age: 30 }, { name: 'Bob', age: 25 }];
+ * const names = keyValues(data, 'name'); // ['Alice', 'Bob']
+ * const ages = keyValues(data, 'age'); // [30, 25]
+ */
+export function keyValues<T extends Record<string, any>>(listOfObjects: T[], key: keyof T): ValueOf<keyof T>[];
+
+/**
+ * Removes duplicate values from a given value based on its type.
+ * - **String**: Removes duplicate characters.
+ * - **Array**: Removes duplicate elements.
+ * 
+ * @param {T} value - The input value to remove duplicates from.
+ * @returns {R} The value with duplicates removed, or `null` if the type is unsupported.
+ * @param {Object} [options] - Optional settings.
+ * @param {string} [options.equality] - Type of equality check: `loose` [==] (default) or `strict` [===].
+ */
+export function removeDuplicates<
+  T, 
+  R = 
+  T extends string
+  ? string
+  : T extends Array<infer U>
+  ? U
+  : null
+  >(value: T, options?: {
+    equality?: 'loose' | 'strict';
+  }): R;

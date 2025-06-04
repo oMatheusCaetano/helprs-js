@@ -1,4 +1,4 @@
-const { first, last, uniqId, uuid, removeFirst, removeLast, concatPath, removeNonNumbers, tw } = require('.');
+const { first, last, uniqId, uuid, removeFirst, removeLast, concatPath, removeNonNumbers, tw, keyValue } = require('.');
 
 describe('first', () => {
   test('Returns empty string for empty string input', () => {
@@ -266,5 +266,43 @@ describe('removeNonNumbers', () => {
 
   test('should handle unicode and non-breaking spaces', () => {
     expect(removeNonNumbers('1\u00A02\u20073')).toBe('123');
+  });
+});
+
+describe('keyValues', () => {
+  const { keyValues } = require('.');
+
+  test('extracts values for a given key from an array of objects', () => {
+    const data = [
+      { name: 'Alice', age: 30 },
+      { name: 'Bob', age: 25 },
+      { name: 'Charlie', age: 40 }
+    ];
+    expect(keyValues(data, 'name')).toEqual(['Alice', 'Bob', 'Charlie']);
+    expect(keyValues(data, 'age')).toEqual([30, 25, 40]);
+  });
+
+  test('returns an empty array for an empty list', () => {
+    expect(keyValues([], 'name')).toEqual([]);
+  });
+
+  test('does not return null and undefined values', () => {
+    const data = [
+      { name: 'Alice' },
+      { age: 25 },
+      { age: 50, name: null },
+      { name: 'Charlie', age: 40 }
+    ];
+    expect(keyValues(data, 'name')).toEqual(['Alice', 'Charlie']);
+    expect(keyValues(data, 'age')).toEqual([25, 50, 40]);
+  });
+
+  test('works with different value types', () => {
+    const data = [
+      { id: 1, active: true },
+      { id: 2, active: false },
+      { id: 3, active: true }
+    ];
+    expect(keyValues(data, 'active')).toEqual([true, false, true]);
   });
 });
