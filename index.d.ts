@@ -207,10 +207,10 @@ export function removeNonNumbers(value?: string): string;
  * Concatenates and deduplicates Tailwind CSS class names.
  * Supports multiple arguments, arrays, and nested arrays of strings.
  *
- * @param {...(string|string[])} args - Class names or arrays of class names.
+ * @param {...(string|string|number|null|undefined[])} args - Class names or arrays of class names.
  * @returns {string} The merged, sorted, and deduplicated class names.
  *
  * @example
  * tw('bg-red-500', 'text-white', ['p-4', 'm-2']); // 'bg-red-500 m-2 p-4 text-white'
  */
-export function tw(...args: (string | string[])[]): string;
+export function tw(...args: (string|string|number|null|undefined[])[]): string;
