@@ -1,10 +1,38 @@
 /**
- * Returns the first character of the given value.
- * - If the value is an empty string, it will return an empty string.
- * - If the value is a boolean, it return 't' for `true` and 'f' for `false`.	
- * - If the value is an array, it will return the first element of the array and null if the array is empty.
- * - If the value is an object with at least one key, it will return the value of the first key in the object.
- * - If the value is empty (not string) or not of a supported type, it will return null.
+ * Returns the first portion of the given value, depending on its type.
+ *
+ * Behavior by type:
+ * - **String**: Returns the first character, or the first `amount` characters if specified.
+ * - **Number**: Returns the first digit(s) of the number. Preserves the negative sign for negative numbers.
+ * - **Boolean**: Returns `'t'` for `true` and `'f'` for `false`.
+ * - **Array**: Returns the first element, or the first `amount` elements if specified.
+ * - **Object**: Returns the value of the first key, or an array of values for the first `amount` keys.
+ * - **Other / empty values**: Returns `null`.
+ *
+ * @param {*} value - The input value to extract the first part from.
+ * @param {Object} [options] - Optional settings.
+ * @param {number} [options.amount] - If specified, returns the first `amount` characters/elements/values.
+ * @returns {*} The extracted portion of the value based on its type and the `amount` option.
+ *
+ * @example
+ * first('Hello'); // 'H'
+ * first('Hello', { amount: 3 }); // 'Hel'
+ *
+ * first(12345); // 1
+ * first(-9876, { amount: 2 }); // -98
+ *
+ * first(true); // 't'
+ * first(false); // 'f'
+ *
+ * first([1, 2, 3]); // 1
+ * first([1, 2, 3], { amount: 2 }); // [1, 2]
+ *
+ * first({ a: 'x', b: 'y' }); // 'x'
+ * first({ a: 'x', b: 'y' }, { amount: 2 }); // ['x', 'y']
+ *
+ * first([]); // null
+ * first({}); // null
+ * first(null); // null
  */
 export function first<
   T, 
@@ -20,15 +48,42 @@ export function first<
   : T extends object
   ? T[keyof T]
   : null
-  >(str: T): R;
+  >(str: T, options?: {
+    amount?: number;
+  }): R;
 
 /**
- * Returns the last character of the given value.
- * - If the value is an empty string, it will return an empty string.
- * - If the value is a boolean, it return 't' for `true` and 'f' for `false`.	
- * - If the value is an array, it will return the last element of the array and null if the array is empty.
- * - If the value is an object with at least one key, it will return the value of the last key in the object.
- * - If the value is empty (not string) or not of a supported type, it will return null.
+ * Returns the last portion of the given value, depending on its type.
+ *
+ * Behavior by type:
+ * - **String**: Returns the last character, or the last `amount` characters if specified.
+ * - **Number**: Returns the last digit(s) as a positive number (ignores minus sign).
+ * - **Boolean**: Always returns `'e'` (from `'true'` or `'false'`).
+ * - **Array**: Returns the last element, or the last `amount` elements if specified.
+ * - **Object**: Returns the value of the last key, or an array of values from the last `amount` keys.
+ * - **Other / empty values**: Returns `null`.
+ *
+ * @param {*} value - The input value to extract the last part from.
+ * @param {{ amount?: number }} [options] - Optional settings.
+ * @returns {*} The extracted portion of the value.
+ *
+ * @example
+ * last('hello'); // 'o'
+ * last('hello', { amount: 2 }); // 'lo'
+ *
+ * last(12345); // 5
+ * last(12345, { amount: 3 }); // 345
+ * last(-6789); // 9
+ * last(-6789, { amount: 2 }); // 89
+ *
+ * last([1, 2, 3]); // 3
+ * last([1, 2, 3], { amount: 2 }); // [2, 3]
+ *
+ * last({ a: 'x', b: 'y', c: 'z' }); // 'z'
+ * last({ a: 'x', b: 'y', c: 'z' }, { amount: 2 }); // ['y', 'z']
+ *
+ * last(true); // 'e'
+ * last(null); // null
  */
 export function last<
   T, 
@@ -44,45 +99,118 @@ export function last<
   : T extends object
   ? T[keyof T]
   : null
-  >(str: T): R;
+  >(str: T, options?: {
+    amount?: number;
+  }): R;
 
 /**
- * Generates a unique ID.
+ * Removes the first portion of a given value.
+ * - If the value is a number, removes the first digit(s) and returns a number.
+ * - If the value is a string, removes the first character(s) and returns the substring.
+ * - If the value is an array, removes the first element(s) and returns a new array.
+ * - If the value is an object, removes the first key(s) and returns a new object.
+ *
+ * @param {string | number | any[] | object} value - The input value.
+ * @param {{ amount?: number }} [options] - Optional settings to control how many units to remove.
+ * @returns {string | number | any[] | object | null} The value without the first portion.
+ *
+ * @example
+ * removeFirst('hello'); // 'ello'
+ * removeFirst('hello', { amount: 2 }); // 'llo'
+ * removeFirst(12345); // 2345
+ * removeFirst(12345, { amount: 3 }); // 45
+ * removeFirst([1, 2, 3]); // [2, 3]
+ * removeFirst([1, 2, 3], { amount: 2 }); // [3]
+ * removeFirst({ a: 1, b: 2, c: 3 }); // { b: 2, c: 3 }
+ * removeFirst({ a: 1, b: 2, c: 3 }, { amount: 2 }); // { c: 3 }
+ */
+export function removeFirst<T = number | string | any[] | object>(
+  value: T,
+  options?: { amount?: number }
+): string | number | any[] | object | null;
+
+/**
+ * Removes the last portion of a given value.
+ * - If the value is a number, removes the last digit(s) and returns a number.
+ * - If the value is a string, removes the last character(s) and returns the substring.
+ * - If the value is an array, removes the last element(s) and returns a new array.
+ * - If the value is an object, removes the last key(s) and returns a new object.
+ *
+ * @param {string | number | any[] | object} value - The input value.
+ * @param {{ amount?: number }} [options] - Optional settings to control how many units to remove.
+ * @returns {string | number | any[] | object | null} The value without the last portion.
+ *
+ * @example
+ * removeLast('hello'); // 'hell'
+ * removeLast('hello', { amount: 2 }); // 'hel'
+ * removeLast(12345); // 1234
+ * removeLast(12345, { amount: 3 }); // 12
+ * removeLast([1, 2, 3]); // [1, 2]
+ * removeLast([1, 2, 3], { amount: 2 }); // [1]
+ * removeLast({ a: 1, b: 2, c: 3 }); // { a: 1, b: 2 }
+ * removeLast({ a: 1, b: 2, c: 3 }, { amount: 2 }); // { a: 1 }
+ */
+export function removeLast<T = number | string | any[] | object>(
+  value: T,
+  options?: { amount?: number }
+): string | number | any[] | object | null;
+
+/**
+ * Generates a unique random ID string.
+ * Uses random base-36 strings concatenated to increase uniqueness.
+ *
+ * @returns {string} A unique random string ID.
+ *
+ * @example
+ * uniqId(); // '4g7k1z0a3p9h5x7'
  */
 export function uniqId(): string;
 
 /**
- * Generates a unique identifier in UUID format.
+ * Generates a RFC4122 version 4 UUID.
+ *
+ * @returns {string} A UUID string in the format 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.
+ *
+ * @example
+ * uuid(); // '3f9d7b7e-9c1a-4f7d-8a2b-1c2e3f4d5a6b'
  */
 export function uuid(): string;
 
 /**
- * Removes the first character from a given value.
- */
-export function removeFirst<T = number | string | any[]>(value: T): 
-  T extends number ? number :
-  T extends string ? string :
-  any[];
-
-/**
- * Removes the last character from a given value.
- */
-export function removeLast<T = number | string | any[]>(value: T): 
-  T extends number ? number :
-  T extends string ? string :
-  any[];
-
-/**
- * Concatenates multiple path segments into a single path.
+ * Concatenates multiple path segments into a normalized single path.
+ * - Removes duplicate slashes.
+ * - Trims leading/trailing slashes from segments.
+ * - Joins segments with a single slash.
+ *
+ * @param {...string} paths - The path segments to join.
+ * @returns {string} The concatenated path.
+ *
+ * @example
+ * concatPath('/foo/', '/bar', 'baz/'); // 'foo/bar/baz'
+ * concatPath('///a', 'b//c/', '/d/'); // 'a/b/c/d'
  */
 export function concatPath(...paths: (string | number)[]): string;
 
 /**
- * Removes all the non numeric characters from a given value.
+ * Removes all non-numeric characters from a string.
+ *
+ * @param {string} value - The input string.
+ * @returns {string} The string containing only numeric characters.
+ *
+ * @example
+ * removeNonNumbers('Phone: +1 (234) 567-8900'); // '12345678900'
+ * removeNonNumbers('abc123def'); // '123'
  */
 export function removeNonNumbers(value?: string): string;
 
 /**
- * Handles TailwindCSS class merge.
+ * Concatenates and deduplicates Tailwind CSS class names.
+ * Supports multiple arguments, arrays, and nested arrays of strings.
+ *
+ * @param {...(string|string[])} args - Class names or arrays of class names.
+ * @returns {string} The merged, sorted, and deduplicated class names.
+ *
+ * @example
+ * tw('bg-red-500', 'text-white', ['p-4', 'm-2']); // 'bg-red-500 m-2 p-4 text-white'
  */
-export function tw(className?: string, ...args: string[]): string;
+export function tw(...args: (string | string[])[]): string;

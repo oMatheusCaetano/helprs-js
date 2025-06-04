@@ -1,8 +1,20 @@
-const { first, last, uniqId, uuid, removeFirst, concatPath, tw } = require('.');
+const { first, last, uniqId, uuid, removeFirst, removeLast, concatPath, removeNonNumbers, tw } = require('.');
 
 describe('first', () => {
   test('Returns empty string for empty string input', () => {
     expect(first('')).toBe('');
+  });
+
+  test('Returns first characters of string with amount', () => {
+    expect(first('Hello World', { amount: 3 })).toBe('Hel');
+    expect(first('A', { amount: 5 })).toBe('A');
+  });
+
+  test('Returns first digit(s) of number', () => {
+    expect(first(123)).toBe(1);
+    expect(first(-123)).toBe(-1);
+    expect(first(9876, { amount: 2 })).toBe(98);
+    expect(first(-9876, { amount: 2 })).toBe(-98);
   });
 
   test('Returns first character for boolean input', () => {
@@ -15,6 +27,11 @@ describe('first', () => {
     expect(first([55, 2, 3])).toBe(55);
   });
 
+  test('Returns sliced array with amount', () => {
+    expect(first([10, 20, 30], { amount: 2 })).toEqual([10, 20]);
+    expect(first([5], { amount: 3 })).toEqual([5]);
+  });
+
   test('Returns null for empty array input', () => {
     expect(first([])).toBeNull();
   });
@@ -22,6 +39,12 @@ describe('first', () => {
   test('Returns value of first key for object input', () => {
     expect(first({ key1: 'value1', key2: 'value2' })).toBe('value1');
     expect(first({ key2: 'value2', key1: 'value1' })).toBe('value2');
+  });
+
+  test('Returns first N values of object with amount', () => {
+    const obj = { a: 1, b: 2, c: 3 };
+    expect(first(obj, { amount: 2 })).toEqual([1, 2]);
+    expect(first({ x: 'X' }, { amount: 5 })).toEqual(['X']);
   });
 
   test('Returns null for empty object input', () => {
@@ -40,37 +63,52 @@ describe('first', () => {
   });
 });
 
-
 describe('last', () => {
-  // Test case for an empty string
   test('returns an empty string for an empty string input', () => {
     expect(last('')).toBe('');
   });
 
-  // Test case for a boolean value
   test("returns 'e' for a boolean value", () => {
     expect(last(true)).toBe('e');
     expect(last(false)).toBe('e');
   });
 
-  // Test case for an array
   test('returns the last element of the array or null for an empty array', () => {
     expect(last([1, 2, 3])).toBe(3);
-    expect(last([])).toBeNull();
+    expect(last([], { amount: 2 })).toBeNull();
+    expect(last([1, 2, 3], { amount: 2 })).toEqual([2, 3]);
   });
 
-  // Test case for an object
   test('returns the value of the last key in the object', () => {
     expect(last({ a: 1, b: 2, c: 3 })).toBe(3);
+    expect(last({ a: 1, b: 2, c: 3 }, { amount: 2 })).toEqual([2, 3]);
     expect(last({})).toBeNull();
   });
 
-  // Test case for unsupported types or empty values
-  test('returns null for unsupported types or empty values', () => {
+  test('returns the last digit(s) for numbers (positive and negative)', () => {
+    expect(last(123)).toBe(3);
+    expect(last(9876, { amount: 2 })).toBe(76);
+    expect(last(-456)).toBe(6);
+    expect(last(-98765, { amount: 3 })).toBe(765); // Sem sinal
+  });
+
+  test('returns the last character(s) of a string', () => {
+    expect(last('hello')).toBe('o');
+    expect(last('hello', { amount: 2 })).toBe('lo');
+    expect(last('a', { amount: 2 })).toBe('a');
+  });
+
+  test('returns null for unsupported or missing values', () => {
     expect(last(null)).toBeNull();
     expect(last(undefined)).toBeNull();
-    expect(last(123)).toBe(3);
-    expect(last({ a: 1 })).toBe(1);
+    expect(last()).toBeNull();
+  });
+
+  it('should return the original value when amount is 0', () => {
+    expect(removeLast('hello', { amount: 0 })).toBe('hello');
+    expect(removeLast(12345, { amount: 0 })).toBe(12345);
+    expect(removeLast([1, 2, 3], { amount: 0 })).toEqual([1, 2, 3]);
+    expect(removeLast({ a: 1, b: 2 }, { amount: 0 })).toEqual({ a: 1, b: 2 });
   });
 });
 
@@ -117,6 +155,52 @@ describe('removeFirst', () => {
     const result2 = removeFirst([]);
     expect(result2).toEqual([]);
   });
+
+  it('should remove the first digits of a number with amount', () => {
+    expect(removeFirst(12345, { amount: 2 })).toBe(345);
+  });
+
+  it('should remove the first elements of an array with amount', () => {
+    expect(removeFirst([1, 2, 3, 4], { amount: 2 })).toEqual([3, 4]);
+  });
+
+  it('should remove the first keys of an object with amount', () => {
+    const obj = { a: 1, b: 2, c: 3 };
+    expect(removeFirst(obj, { amount: 2 })).toEqual({ c: 3 });
+  });
+
+  it('should return the original value when amount is 0', () => {
+    expect(removeFirst('hello', { amount: 0 })).toBe('hello');
+    expect(removeFirst(12345, { amount: 0 })).toBe(12345);
+    expect(removeFirst([1, 2, 3], { amount: 0 })).toEqual([1, 2, 3]);
+    expect(removeFirst({ a: 1, b: 2 }, { amount: 0 })).toEqual({ a: 1, b: 2 });
+  });
+});
+
+describe('removeLast', () => {
+  it('should remove the last characters of a string with amount', () => {
+    expect(removeLast('hello', { amount: 2 })).toBe('hel');
+  });
+
+  it('should remove the last digits of a number with amount', () => {
+    expect(removeLast(12345, { amount: 2 })).toBe(123);
+  });
+
+  it('should remove the last elements of an array with amount', () => {
+    expect(removeLast([1, 2, 3, 4], { amount: 2 })).toEqual([1, 2]);
+  });
+
+  it('should remove the last keys of an object with amount', () => {
+    const obj = { a: 1, b: 2, c: 3 };
+    expect(removeLast(obj, { amount: 2 })).toEqual({ a: 1 });
+  });
+
+  it('should return the original value when amount is 0', () => {
+    expect(removeLast('hello', { amount: 0 })).toBe('hello');
+    expect(removeLast(12345, { amount: 0 })).toBe(12345);
+    expect(removeLast([1, 2, 3], { amount: 0 })).toEqual([1, 2, 3]);
+    expect(removeLast({ a: 1, b: 2 }, { amount: 0 })).toEqual({ a: 1, b: 2 });
+  });
 });
 
 describe('concatPath', () => {
@@ -143,9 +227,44 @@ describe('concatPath', () => {
 
 describe('tw', () => {
   test('Should concatenate classes.', () => {
-    expect(
-      tw('bg-primary border-b  bg-primary', 'bg-primary border-b  bg-primary')
-    ).toBe('border-b bg-primary');
+    const result = tw('bg-primary border-b  bg-primary', 'bg-primary border-b  bg-primary');
+    const expected = ['border-b', 'bg-primary'];
+    const resultSet = new Set(result.split(/\s+/));
+    expect(resultSet).toEqual(new Set(expected));
   });
-})
 
+  test('Should support deeply nested arrays of classes.', () => {
+    const result = tw('text-red', ['bg-white', ['m-4', ['p-2']]]);
+    const expected = ['text-red', 'bg-white', 'm-4', 'p-2'];
+    const resultSet = new Set(result.split(/\s+/));
+    expect(resultSet).toEqual(new Set(expected));
+  });
+
+  test('Should handle falsy values like null, undefined, empty string, and 0', () => {
+    const result = tw(null, undefined, '', 0, 'text-blue', ['bg-red']);
+    const expected = ['text-blue', 'bg-red'];
+    const resultSet = new Set(result.split(/\s+/));
+    expect(resultSet).toEqual(new Set(expected));
+  });
+});
+
+describe('removeNonNumbers', () => {
+  test('should remove all non-numeric characters from a string', () => {
+    expect(removeNonNumbers('Phone: +1 (234) 567-8900')).toBe('12345678900');
+    expect(removeNonNumbers('abc123def')).toBe('123');
+    expect(removeNonNumbers('$1,000.50')).toBe('100050');
+    expect(removeNonNumbers('')).toBe('');
+    expect(removeNonNumbers()).toBe('');
+    expect(removeNonNumbers(null)).toBe('');
+    expect(removeNonNumbers(undefined)).toBe('');
+  });
+
+  test('should handle non-string input like numbers', () => {
+    expect(removeNonNumbers(123456)).toBe('123456');
+    expect(removeNonNumbers(-789)).toBe('789');
+  });
+
+  test('should handle unicode and non-breaking spaces', () => {
+    expect(removeNonNumbers('1\u00A02\u20073')).toBe('123');
+  });
+});
