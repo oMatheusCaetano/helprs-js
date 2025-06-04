@@ -1,4 +1,17 @@
-const { first, last, uniqId, uuid, removeFirst, removeLast, concatPath, removeNonNumbers, tw, keyValues, removeDuplicates } = require('.');
+const {
+  first,
+  last,
+  uniqId,
+  uuid,
+  removeFirst,
+  removeLast,
+  concatPath,
+  removeNonNumbers,
+  tw,
+  keyValues,
+  removeDuplicates,
+  formatCnpjCpf
+} = require('.');
 
 describe('first', () => {
   test('Returns empty string for empty string input', () => {
@@ -362,5 +375,71 @@ describe('removeDuplicates', () => {
     expect(removeDuplicates({ a: 1 })).toBeNull();
     expect(removeDuplicates(null)).toBeNull();
     expect(removeDuplicates(undefined)).toBeNull();
+  });
+});
+
+describe('formatCnpjCpf', () => {
+  test('formats raw CPF string correctly', () => {
+    expect(formatCnpjCpf('12345678909')).toBe('123.456.789-09');
+  });
+
+  test('returns already formatted CPF as-is', () => {
+    expect(formatCnpjCpf('123.456.789-09')).toBe('123.456.789-09');
+  });
+
+  test('formats raw CNPJ string correctly', () => {
+    expect(formatCnpjCpf('12345678000195')).toBe('12.345.678/0001-95');
+  });
+
+  test('returns already formatted CNPJ as-is', () => {
+    expect(formatCnpjCpf('12.345.678/0001-95')).toBe('12.345.678/0001-95');
+  });
+
+  test('returns empty string for undefined or empty input', () => {
+    expect(formatCnpjCpf(undefined)).toBe('');
+    expect(formatCnpjCpf('')).toBe('');
+  });
+
+  test('returns unformatted input if length is not 11 or 14', () => {
+    expect(formatCnpjCpf('123')).toBe('123');
+    expect(formatCnpjCpf('abcdefg')).toBe('abcdefg');
+  });
+
+  test('formats an array of CNPJ/CPF strings', () => {
+    const input = ['12345678000195', '12345678909'];
+    const expected = ['12.345.678/0001-95', '123.456.789-09'];
+    expect(formatCnpjCpf(input)).toEqual(expected);
+  });
+
+  test('formats an object with only CNPJ', () => {
+    const input = { cnpj: '12345678000195' };
+    const expected = { cnpj: '12.345.678/0001-95' };
+    expect(formatCnpjCpf(input)).toEqual(expected);
+  });
+
+  test('formats an object with only CPF', () => {
+    const input = { cpf: '12345678909' };
+    const expected = { cpf: '123.456.789-09' };
+    expect(formatCnpjCpf(input)).toEqual(expected);
+  });
+
+  test('formats an object with both CPF and CNPJ', () => {
+    const input = { cpf: '12345678909', cnpj: '12345678000195' };
+    const expected = { cpf: '123.456.789-09', cnpj: '12.345.678/0001-95' };
+    expect(formatCnpjCpf(input)).toEqual(expected);
+  });
+
+  test('formats an array of objects with CNPJ/CPF', () => {
+    const input = [
+      { cnpj: '12345678000195' },
+      { cpf: '12345678909' },
+      { cpf: '12345678909', cnpj: '12345678000195' }
+    ];
+    const expected = [
+      { cnpj: '12.345.678/0001-95' },
+      { cpf: '123.456.789-09' },
+      { cpf: '123.456.789-09', cnpj: '12.345.678/0001-95' }
+    ];
+    expect(formatCnpjCpf(input)).toEqual(expected);
   });
 });

@@ -19,6 +19,7 @@ yarn add @matheuscaetano/helprs
 
 | Function         | Description |
 |------------------|-------------|
+| `formatCnpjCpf` | Formats a CPF or CNPJ number into a standardized string format. |
 | `first` | Returns the first portion of strings, numbers, booleans, arrays, or objects. Supports `amount` option. |
 | `last` | Returns the last portion of strings, numbers, booleans, arrays, or objects. Supports `amount` option. |
 | `removeFirst` | Removes the first portion of strings, numbers, arrays, or objects. Supports `amount` option. |

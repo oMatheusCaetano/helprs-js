@@ -267,3 +267,36 @@ export function removeDuplicates<
   ? U
   : null
   >(value: T, options?: RemoveDuplicatesOptions): R;
+
+/**
+ * Formats a CPF or CNPJ number into a standardized string format.
+ * - For strings: returns the formatted CPF or CNPJ.
+ * - For arrays of strings: returns an array of formatted values.
+ * - For objects with `cpf` or `cnpj` keys: returns a new object with those values formatted.
+ * - For arrays of such objects: returns an array with each object having its CPF/CNPJ formatted.
+ *
+ * If the value is not a valid CPF or CNPJ (lengths 11 or 14), it is returned as-is.
+ *
+ * @param {string | string[] | object | object[]} value - The value(s) to format.
+ * @returns {string | string[] | object | object[]} The formatted CPF/CNPJ value(s).
+ *
+ * @example
+ * formatCnpjCpf('12345678000195'); // '12.345.678/0001-95'
+ * formatCnpjCpf('12345678909'); // '123.456.789-09'
+ * formatCnpjCpf(['12345678000195', '12345678909']); // ['12.345.678/0001-95', '123.456.789-09']
+ * formatCnpjCpf({ cpf: '12345678909' }); // { cpf: '123.456.789-09' }
+ * formatCnpjCpf({ cnpj: '12345678000195' }); // { cnpj: '12.345.678/0001-95' }
+ * formatCnpjCpf([
+ *   { cpf: '12345678909' },
+ *   { cnpj: '12345678000195' },
+ *   { cpf: '12345678909', cnpj: '12345678000195' }
+ * ]); // [
+ *   { cpf: '123.456.789-09' },
+ *   { cnpj: '12.345.678/0001-95' },
+ *   { cpf: '123.456.789-09', cnpj: '12.345.678/0001-95' }
+ * ]
+ */
+export function formatCnpjCpf(value: string): string;
+export function formatCnpjCpf(value: string[]): string[];
+export function formatCnpjCpf<T extends { [key: string]: any }>(value: T): T;
+export function formatCnpjCpf<T extends { [key: string]: any }>(value: T[]): T[];

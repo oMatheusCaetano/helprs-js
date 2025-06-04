@@ -421,6 +421,83 @@ function removeDuplicates(value, options = {}) {
   return null;
 }
 
+
+/**
+ * Formats a CPF or CNPJ number into a standardized string format.
+ * - For strings: returns the formatted CPF or CNPJ.
+ * - For arrays of strings: returns an array of formatted values.
+ * - For objects with `cpf` or `cnpj` keys: returns a new object with those values formatted.
+ * - For arrays of such objects: returns an array with each object having its CPF/CNPJ formatted.
+ *
+ * If the value is not a valid CPF or CNPJ (lengths 11 or 14), it is returned as-is.
+ *
+ * @param {string | string[] | object | object[]} value - The value(s) to format.
+ * @returns {string | string[] | object | object[]} The formatted CPF/CNPJ value(s).
+ *
+ * @example
+ * formatCnpjCpf('12345678000195'); // '12.345.678/0001-95'
+ * formatCnpjCpf('12345678909'); // '123.456.789-09'
+ * formatCnpjCpf(['12345678000195', '12345678909']); // ['12.345.678/0001-95', '123.456.789-09']
+ * formatCnpjCpf({ cpf: '12345678909' }); // { cpf: '123.456.789-09' }
+ * formatCnpjCpf({ cnpj: '12345678000195' }); // { cnpj: '12.345.678/0001-95' }
+ * formatCnpjCpf([
+ *   { cpf: '12345678909' },
+ *   { cnpj: '12345678000195' },
+ *   { cpf: '12345678909', cnpj: '12345678000195' }
+ * ]); // [
+ *   { cpf: '123.456.789-09' },
+ *   { cnpj: '12.345.678/0001-95' },
+ *   { cpf: '123.456.789-09', cnpj: '12.345.678/0001-95' }
+ * ]
+ */
+function formatCnpjCpf(value) {
+    if (value === undefined || value === '') return '';
+
+  function _formatCnpjCpf_handleFormat(val) {
+      if (value === undefined || value === '') return '';
+
+    // Remove all non-numeric characters
+    const sanitized = removeNonNumbers(val);
+
+    // Check if it's a valid CNPJ (14 digits)
+    if (sanitized.length === 14) {
+      return sanitized.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, '$1.$2.$3/$4-$5');
+    }
+
+    // Check if it's a valid CPF (11 digits)
+    if (sanitized.length === 11) {
+      return sanitized.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+    }
+
+    // If not a valid CNPJ or CPF, return the original value
+    return val;
+  }
+
+  function _formatCnpjCpf_handleObjectFormat(val) {
+    if ('cpf' in val) val.cpf = _formatCnpjCpf_handleFormat(val.cpf);
+    if ('cnpj' in val) val.cnpj = _formatCnpjCpf_handleFormat(val.cnpj);
+    return val;
+  }
+
+  if (typeof value === 'string') {
+    return _formatCnpjCpf_handleFormat(value);
+  }
+
+  if (Array.isArray(value)) {
+    return value.map(item => {
+      if (typeof item === 'string') return _formatCnpjCpf_handleFormat(item);
+      if (typeof item === 'object') return _formatCnpjCpf_handleObjectFormat(item);
+      return item; // Return as is if not a string or object
+    });
+  }
+
+  if (typeof value === 'object' && value !== null) {
+    return _formatCnpjCpf_handleObjectFormat(value);
+  }
+
+  return value;
+}
+
 module.exports = {
   concatPath,
   first,
@@ -432,5 +509,6 @@ module.exports = {
   uuid,
   removeNonNumbers,
   keyValues,
-  removeDuplicates
+  removeDuplicates,
+  formatCnpjCpf
 }
