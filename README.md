@@ -41,12 +41,6 @@ console.log(uuid()); // Generates a UUID
 console.log(concatPath('/api/', '/user/', '123')); // api/user/123
 ```
 
-## 🧪 Tests
-
-```bash
-npm test
-```
-
 ## 📄 License
 
 MIT © [Matheus Caetano](https://lnk.bio/MatheusCaetano)matheuscaetano/helprs
