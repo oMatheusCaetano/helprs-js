@@ -1,5 +1,3 @@
-type ValueOf<T> = T extends object ? T[keyof T] : never;
-
 /**
  * Returns the first portion of the given value, depending on its type.
  *

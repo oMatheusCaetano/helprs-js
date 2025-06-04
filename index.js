@@ -353,16 +353,24 @@ function tw(...args) {
 
 /**
  * Extracts values from a list of objects based on a specified key.
- * Returns an array of values corresponding to the given key.
+ * Returns an array of values corresponding to that key.
  * 
- * If the key does not exist in an object or its value is null/undefined, it will not be included in the result.
+ * If a key is missing or its value is `null` or `undefined` in an object,
+ * that value will be excluded from the result.
  * 
- * @param {Object[]} listOfObjects - An array of objects to extract values from.
- * @param {string} key - The key whose values will be extracted from each object.
- * @returns {any[]} An array of values corresponding to the specified key.
+ * Optionally, duplicate values can be removed by setting `removeDuplicates`.
+ * 
+ * @param {Object[]} listOfObjects - The array of objects to extract values from.
+ * @param {string} key - The key whose values should be extracted from each object.
  * @param {Object} [options] - Optional settings.
- * @param {boolean | RemoveDuplicatesOptions} [options.removeDuplicates] - If true, removes duplicate values from the result.
- *  Check `removeDuplicates` for more details on how duplicates are removed.
+ * @param {boolean | Object} [options.removeDuplicates] - If true or configured, removes duplicate values from the result.
+ * 
+ * @returns {any[]} An array of values for the specified key, optionally deduplicated.
+ * 
+ * @example
+ * const data = [{ name: 'Alice', age: 30 }, { name: 'Bob', age: 25 }, { name: 'Alice', age: 30 }];
+ * const names = keyValues(data, 'name'); // ['Alice', 'Bob', 'Alice']
+ * const uniqueNames = keyValues(data, 'name', { removeDuplicates: true }); // ['Alice', 'Bob']
  */
 function keyValues(listOfObjects, key, options) {
   const data = listOfObjects
