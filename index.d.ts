@@ -1,3 +1,5 @@
+type ValueOf<T> = T extends object ? T[keyof T] : never;
+
 /**
  * Returns the first portion of the given value, depending on its type.
  *
@@ -233,9 +235,9 @@ export function tw(...args: (string | string[] | number | number[] | null | null
  * const names = keyValues(data, 'name'); // ['Alice', 'Bob']
  * const ages = keyValues(data, 'age'); // [30, 25]
  */
-export function keyValues<T extends Record<string, any>>(listOfObjects: T[], key: keyof T, options: {
+export function keyValues<T extends Record<string, any>>(listOfObjects: T[], key: keyof T, options?: {
   removeDuplicates?: boolean | RemoveDuplicatesOptions;
-}): ValueOf<keyof T>[];
+}): ValueOf<T>[];
 
 type RemoveDuplicatesOptions = {
   /** Type of equality check: `loose` [==] (default) or `strict` [===]. **/
