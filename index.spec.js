@@ -303,6 +303,39 @@ describe('keyValues', () => {
     ];
     expect(keyValues(data, 'active')).toEqual([true, false, true]);
   });
+
+  test('removes duplicates if option removeDuplicates is true', () => {
+    const duplicateData = [
+      { key: 'a' },
+      { key: 'b' },
+      { key: 'a' },
+      { key: 'c' },
+      { key: 'b' }
+    ];
+    expect(keyValues(duplicateData, 'key', { removeDuplicates: true })).toEqual(['a', 'b', 'c']);
+  });
+
+  test('removes duplicates with options object', () => {
+    const duplicateData = [
+      { key: '1' },
+      { key: 1 },
+      { key: '2' },
+      { key: 2 },
+      { key: '1' }
+    ];
+    expect(keyValues(duplicateData, 'key', { removeDuplicates: { equality: 'strict' } })).toEqual(['1', 1, '2', 2]);
+  });
+
+  test('returns values as is if removeDuplicates is false or not provided', () => {
+    const dataNoDup = [
+      { val: 1 },
+      { val: 2 },
+      { val: 1 },
+      { val: 3 }
+    ];
+    expect(keyValues(dataNoDup, 'val')).toEqual([1, 2, 1, 3]);
+    expect(keyValues(dataNoDup, 'val', { removeDuplicates: false })).toEqual([1, 2, 1, 3]);
+  });
 });
 
 describe('removeDuplicates', () => {

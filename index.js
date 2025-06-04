@@ -360,11 +360,21 @@ function tw(...args) {
  * @param {Object[]} listOfObjects - An array of objects to extract values from.
  * @param {string} key - The key whose values will be extracted from each object.
  * @returns {any[]} An array of values corresponding to the specified key.
+ * @param {Object} [options] - Optional settings.
+ * @param {boolean | RemoveDuplicatesOptions} [options.removeDuplicates] - If true, removes duplicate values from the result.
+ *  Check `removeDuplicates` for more details on how duplicates are removed.
  */
-function keyValues(listOfObjects, key) {
-  return listOfObjects
+function keyValues(listOfObjects, key, options) {
+  const data = listOfObjects
     .map(obj => obj[key])
     .filter(value => value !== null && value !== undefined);
+
+    return options?.removeDuplicates 
+      ?  removeDuplicates(
+          data, 
+          typeof options.removeDuplicates === 'object' ? options.removeDuplicates : undefined
+        ) 
+      : data;
 }
 
 function removeDuplicates(value, options = {}) {

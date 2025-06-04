@@ -224,13 +224,23 @@ export function tw(...args: (string | string[] | number | number[] | null | null
  * @param {T[]} listOfObjects - An array of objects to extract values from.
  * @param {keyof T} key - The key whose values will be extracted from each object.
  * @returns {ValueOf<keyof T>[]} An array of values corresponding to the specified key.
+ * @param {Object} [options] - Optional settings.
+ * @param {boolean | RemoveDuplicatesOptions} [options.removeDuplicates] - If true, removes duplicate values from the result.
+ *  Check `removeDuplicates` for more details on how duplicates are removed.
  * 
  * @example
  * const data = [{ name: 'Alice', age: 30 }, { name: 'Bob', age: 25 }];
  * const names = keyValues(data, 'name'); // ['Alice', 'Bob']
  * const ages = keyValues(data, 'age'); // [30, 25]
  */
-export function keyValues<T extends Record<string, any>>(listOfObjects: T[], key: keyof T): ValueOf<keyof T>[];
+export function keyValues<T extends Record<string, any>>(listOfObjects: T[], key: keyof T, options: {
+  removeDuplicates?: boolean | RemoveDuplicatesOptions;
+}): ValueOf<keyof T>[];
+
+type RemoveDuplicatesOptions = {
+  /** Type of equality check: `loose` [==] (default) or `strict` [===]. **/
+  equality?: 'loose' | 'strict';
+};
 
 /**
  * Removes duplicate values from a given value based on its type.
@@ -250,6 +260,4 @@ export function removeDuplicates<
   : T extends Array<infer U>
   ? U
   : null
-  >(value: T, options?: {
-    equality?: 'loose' | 'strict';
-  }): R;
+  >(value: T, options?: RemoveDuplicatesOptions): R;
