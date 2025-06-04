@@ -17,15 +17,19 @@ yarn add @matheuscaetano/helprs
 
 ## 🛠️ Features
 
-- `first(value)` – Returns the first character or element of strings, arrays, objects, numbers, or booleans.
-- `last(value)` – Returns the last character or element of strings, arrays, objects, numbers, or booleans.
-- `removeFirst(value)` – Removes the first character or item from strings, arrays, or numbers.
-- `removeLast(value)` – Removes the last character or item from strings, arrays, or numbers.
-- `uniqId()` – Generates a unique identifier based on `Math.random()`.
-- `uuid()` – Generates a UUID in the format `xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx`.
-- `concatPath(...paths)` – Safely concatenates path segments (`/`).
-- `removeNonNumbers(value)` – Removes all non-numeric characters from a string.
-- `tw(className, ...args)` – Merges TailwindCSS classes using `classnames` and `tailwind-merge`.
+| Function         | Description |
+|------------------|-------------|
+| `first(value, options?)` | Returns the first portion of strings, numbers, booleans, arrays, or objects. Supports `amount` option. |
+| `last(value, options?)` | Returns the last portion of strings, numbers, booleans, arrays, or objects. Supports `amount` option. |
+| `removeFirst(value, options?)` | Removes the first portion of strings, numbers, arrays, or objects. Supports `amount` option. |
+| `removeLast(value, options?)` | Removes the last portion of strings, numbers, arrays, or objects. Supports `amount` option. |
+| `uniqId()` | Generates a unique identifier using random base-36 strings. |
+| `uuid()` | Generates a RFC4122 version 4 UUID. |
+| `concatPath(...paths)` | Concatenates and normalizes path segments, removing duplicate slashes. |
+| `removeNonNumbers(value)` | Removes all non-numeric characters from a string. |
+| `tw(...args)` | Concatenates and deduplicates Tailwind CSS class names. Supports strings, arrays, numbers, nulls, and undefined values. |
+| `keyValues(listOfObjects, key, options?)` | Extracts values from a list of objects based on a key. Can remove duplicates. |
+| `removeDuplicates(value, options?)` | Removes duplicate characters in strings or elements in arrays. |
 
 ## ✅ Usage Example
 
