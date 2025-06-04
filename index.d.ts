@@ -217,25 +217,31 @@ export function tw(...args: (string | string[] | number | number[] | null | null
 
 /**
  * Extracts values from a list of objects based on a specified key.
- * Returns an array of values corresponding to the given key.
+ * Returns an array of values corresponding to that key.
  * 
- * If the key does not exist in an object or its value is null, it will not be included in the result.
+ * If a key is missing or its value is `null` or `undefined` in an object,
+ * that value will be excluded from the result.
  * 
- * @param {T[]} listOfObjects - An array of objects to extract values from.
- * @param {keyof T} key - The key whose values will be extracted from each object.
- * @returns {ValueOf<keyof T>[]} An array of values corresponding to the specified key.
+ * Optionally, duplicate values can be removed by setting `removeDuplicates`.
+ * 
+ * @template T - Type of objects in the array.
+ * @template K - Key to extract values from.
+ * 
+ * @param {T[]} listOfObjects - The array of objects to extract values from.
+ * @param {K} key - The key whose values should be extracted from each object.
  * @param {Object} [options] - Optional settings.
- * @param {boolean | RemoveDuplicatesOptions} [options.removeDuplicates] - If true, removes duplicate values from the result.
- *  Check `removeDuplicates` for more details on how duplicates are removed.
+ * @param {boolean | RemoveDuplicatesOptions} [options.removeDuplicates] - If true or configured, removes duplicate values from the result.
+ * 
+ * @returns {T[K][]} An array of values for the specified key, optionally deduplicated.
  * 
  * @example
- * const data = [{ name: 'Alice', age: 30 }, { name: 'Bob', age: 25 }];
- * const names = keyValues(data, 'name'); // ['Alice', 'Bob']
- * const ages = keyValues(data, 'age'); // [30, 25]
+ * const data = [{ name: 'Alice', age: 30 }, { name: 'Bob', age: 25 }, { name: 'Alice', age: 30 }];
+ * const names = keyValues(data, 'name'); // ['Alice', 'Bob', 'Alice']
+ * const uniqueNames = keyValues(data, 'name', { removeDuplicates: true }); // ['Alice', 'Bob']
  */
-export function keyValues<T extends Record<string, any>>(listOfObjects: T[], key: keyof T, options?: {
+export function keyValues<T extends Record<string, any>, K extends keyof T>(listOfObjects: T[], key: K, options?: {
   removeDuplicates?: boolean | RemoveDuplicatesOptions;
-}): ValueOf<T>[];
+}): T[K][];
 
 type RemoveDuplicatesOptions = {
   /** Type of equality check: `loose` [==] (default) or `strict` [===]. **/
