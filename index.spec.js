@@ -262,23 +262,35 @@ describe('tw', () => {
 });
 
 describe('removeNonNumbers', () => {
-  test('should remove all non-numeric characters from a string', () => {
+  test('removes non-numeric characters from a string', () => {
     expect(removeNonNumbers('Phone: +1 (234) 567-8900')).toBe('12345678900');
     expect(removeNonNumbers('abc123def')).toBe('123');
     expect(removeNonNumbers('$1,000.50')).toBe('100050');
+  });
+
+  test('returns empty string for falsy or undefined input', () => {
     expect(removeNonNumbers('')).toBe('');
     expect(removeNonNumbers()).toBe('');
     expect(removeNonNumbers(null)).toBe('');
     expect(removeNonNumbers(undefined)).toBe('');
   });
 
-  test('should handle non-string input like numbers', () => {
+  test('converts numbers to numeric string', () => {
     expect(removeNonNumbers(123456)).toBe('123456');
     expect(removeNonNumbers(-789)).toBe('789');
   });
 
-  test('should handle unicode and non-breaking spaces', () => {
+  test('removes unicode and non-breaking spaces', () => {
     expect(removeNonNumbers('1\u00A02\u20073')).toBe('123');
+  });
+
+  test('removes non-numeric characters from array of strings', () => {
+    expect(removeNonNumbers(['a1b2', '3c4'])).toEqual(['12', '34']);
+    expect(removeNonNumbers(['', 'abc'])).toEqual(['', '']);
+  });
+
+  test('returns empty array for empty input array', () => {
+    expect(removeNonNumbers([])).toEqual([]);
   });
 });
 

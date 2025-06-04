@@ -317,18 +317,32 @@ function concatPath(...paths) {
 }
 
 /**
- * Removes all non-numeric characters from a string.
+ * Removes all non-numeric characters from a string or array of strings.
  *
- * @param {string} value - The input string.
- * @returns {string} The string containing only numeric characters.
+ * - For a single string: returns a string with only numeric characters.
+ * - For an array of strings: returns an array where each string has only numeric characters.
+ * - For undefined, null, or invalid input: returns an empty string or empty array accordingly.
+ *
+ * @param {string | string[] | undefined} value - The string or array of strings to sanitize.
+ * @returns {string | string[]} A numeric-only string or an array of numeric-only strings.
  *
  * @example
  * removeNonNumbers('Phone: +1 (234) 567-8900'); // '12345678900'
  * removeNonNumbers('abc123def'); // '123'
+ * removeNonNumbers(['a1b2', '3c4']); // ['12', '34']
+ * removeNonNumbers(); // ''
  */
 function removeNonNumbers(value) {
-  if (!value) return '';
-  return `${value}`.replace(/\D/g, '');
+  if (value === undefined || value === null) return '';
+
+  function _removeNonNumbers_handleString(str) {
+    if (!str) return '';
+    return `${str}`.replace(/\D/g, '');
+  }
+
+  return Array.isArray(value)
+    ? value.map(_removeNonNumbers_handleString)
+    : _removeNonNumbers_handleString(value)
 }
 
 /**

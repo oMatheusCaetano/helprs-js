@@ -192,16 +192,23 @@ export function uuid(): string;
 export function concatPath(...paths: (string | number)[]): string;
 
 /**
- * Removes all non-numeric characters from a string.
+ * Removes all non-numeric characters from a string or array of strings.
  *
- * @param {string} value - The input string.
- * @returns {string} The string containing only numeric characters.
+ * - For a single string: returns a string with only numeric characters.
+ * - For an array of strings: returns an array where each string has only numeric characters.
+ * - For undefined, null, or invalid input: returns an empty string or empty array accordingly.
+ *
+ * @param {string | string[] | undefined} value - The string or array of strings to sanitize.
+ * @returns {string | string[]} A numeric-only string or an array of numeric-only strings.
  *
  * @example
  * removeNonNumbers('Phone: +1 (234) 567-8900'); // '12345678900'
  * removeNonNumbers('abc123def'); // '123'
+ * removeNonNumbers(['a1b2', '3c4']); // ['12', '34']
+ * removeNonNumbers(); // ''
  */
 export function removeNonNumbers(value?: string): string;
+export function removeNonNumbers(value?: string[]): string[];
 
 /**
  * Concatenates and deduplicates Tailwind CSS class names.
@@ -296,7 +303,8 @@ export function removeDuplicates<
  *   { cpf: '123.456.789-09', cnpj: '12.345.678/0001-95' }
  * ]
  */
-export function formatCnpjCpf(value: string): string;
-export function formatCnpjCpf(value: string[]): string[];
-export function formatCnpjCpf<T extends { [key: string]: any }>(value: T): T;
-export function formatCnpjCpf<T extends { [key: string]: any }>(value: T[]): T[];
+export function formatCnpjCpf(value?: string): string;
+export function formatCnpjCpf(value?: string[]): string[];
+export function formatCnpjCpf<T extends { [key: string]: any }>(value?: T): T;
+export function formatCnpjCpf<T extends { [key: string]: any }>(value?: T[]): T[];
+
