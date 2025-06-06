@@ -1,3 +1,6 @@
+const { twMerge } = require('tailwind-merge');
+const { classnames } = require('tailwindcss-classnames');
+
 /****
  * Returns the first portion of the given value, depending on its type.
  *
@@ -349,7 +352,7 @@ function removeNonNumbers(value) {
  * Concatenates and deduplicates Tailwind CSS class names.
  * Supports multiple arguments, arrays, and nested arrays of strings.
  *
- * @param {...(string|string[]|number|number[]|null|null[]|undefined|undefined[])} args - Class names or arrays of class names.
+ * @param {...(string|string[]|number|number[]|boolean|boolean[]|null|null[]|undefined|undefined[])} args - Class names or arrays of class names.
  * @returns {string} The merged, sorted, and deduplicated class names.
  *
  * @example
@@ -362,7 +365,7 @@ function tw(...args) {
     .filter(Boolean)
     .flatMap(item => (typeof item === 'string' ? item.split(/\s+/) : []));
 
-  return Array.from(new Set(classes)).join(' ');
+  return twMerge(classnames(Array.from(new Set(classes)).join(' '))); ;
 }
 
 /**

@@ -247,6 +247,24 @@ describe('tw', () => {
     expect(resultSet).toEqual(new Set(expected));
   });
 
+  test('Should accept conditional classes.', () => {
+    const result = tw(
+      true && 'bg-primary', 
+      'border-b',
+      false && 'text-red'
+    );
+    const expected = ['bg-primary', 'border-b'];
+    const resultSet = new Set(result.split(/\s+/));
+    expect(resultSet).toEqual(new Set(expected));
+  });
+
+  test('Should care for the order.', () => {
+    const result = tw('bg-primary border-b xbg-primary', 'bg-primary border-b bg-secondary');
+    const expected = ['bg-secondary', 'border-b', 'xbg-primary'];
+    const resultSet = new Set(result.split(/\s+/));
+    expect(resultSet).toEqual(new Set(expected));
+  });
+
   test('Should support deeply nested arrays of classes.', () => {
     const result = tw('text-red', ['bg-white', ['m-4', ['p-2']]]);
     const expected = ['text-red', 'bg-white', 'm-4', 'p-2'];
